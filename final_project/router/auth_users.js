@@ -62,29 +62,24 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
   const username = req.session.authorization.username;
   const review = req.body.review;
 
-    let validreviews = Object.values(books).filter((book)=>{
-        return (books[isbn].reviews[username] === username && books[isbn] === isbn)
-    });
-    if(validreviews.length == 0){
-        books[isbn].reviews[username] = { "review": review };
-    }
+  if (books[isbn]) {
+    books[isbn].reviews[username] = { "review": review };  
+    return res.status(200).send("review successfully submit");
+  }
+   return res.status(404).json({ error: "Book not found" });
     
-    return res.status(200).json({books});
     
 });
 
 regd_users.delete("/auth/review/:isbn", (req, res) => {
     const isbn = req.params.isbn;
     const username = req.session.authorization.username;
-    let validreviews = Object.values(books).filter((book)=>{
-        return (books[isbn].reviews[username] === username && books[isbn] === isbn)
-    });
-    if(validreviews.length == 0){
-		books[bookId].reviews = books[bookId].reviews.filter(review => review.username !== reviewToRemove);
-        //return res.status(200).json(books[isbn].reviews[username]);
+    if (books[isbn] && books[isbn].reviews[username]) {
+        delete books[isbn].reviews[username];
+        return res.status(200).send("review successfully delete");
     }
     
-    return res.status(200).json({books});
+    return res.status(404).json({ error: "Review not found" });
 
 });
 
