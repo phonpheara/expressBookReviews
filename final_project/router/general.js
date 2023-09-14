@@ -21,21 +21,33 @@ public_users.post("/register", (req,res) => {
 });
 
 // Get the book list available in the shop
-public_users.get('/', function (req, res) {
-  //res.send(JSON.stringify({books},null,4));
-    let myPromise = new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve(books);
-        }, 2000);
-    });
+// public_users.get('/', function (req, res) {
+//   //res.send(JSON.stringify({books},null,4));
+//     let myPromise = new Promise((resolve, reject) => {
+//         setTimeout(() => {
+//             resolve(books);
+//         }, 2000);
+//     });
 
-    myPromise
-        .then((books) => {
-        res.send(JSON.stringify({ books }, null, 4));
-        })
-        .catch((error) => {
-        return res.status(404).json({ message: error.message });
-        });
+//     myPromise
+//         .then((books) => {
+//         res.send(JSON.stringify({ books }, null, 4));
+//         })
+//         .catch((error) => {
+//         return res.status(404).json({ message: error.message });
+//         });
+// });
+public_users.get('/', async function (req, res) {
+    try {
+      let myPromise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve(books);
+        }, 2000);
+      });   
+      res.send(JSON.stringify({ books }, null, 4)) = await myPromise
+    } catch (error) {
+      return res.status(404).json({ message: error.message });
+    }
 });
 
 // Get book details based on ISBN
